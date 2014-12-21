@@ -1,0 +1,14 @@
+﻿@model Web.Models.BooksModel
+
+@foreach (var book in Model.Books)
+{
+    var isChecked = book.IsMakred ? "checked" : String.Empty;
+
+    <div class="book-item col-sm-6 col-md-4">
+        <input type="checkbox" @isChecked onchange="bookMark(this,@book.Isbn); return false;" />
+        <div><img id="bookImg" src="@book.ImageUrl" /></div>
+        <div><span>@book.Isbn</span></div>
+        <div><span>@book.Title</span></div>
+    </div>
+}
+

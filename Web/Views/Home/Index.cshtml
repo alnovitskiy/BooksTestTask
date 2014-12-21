@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <h1>Please paste ISBN numbers and click "Show"</h1>
+        <p>Example: 9788741201122 9788741201123 .... </p>
+        <textarea id="isbnTA" placeholder="ISBN numbers where we can insert numbers"></textarea>
+        <div id="showDiv" class="row"><a href="#" class="btn btn-theme-primary" onclick="show(); return false;">Show</a></div>
+    </div>
+    <div class="col-md-7">
+        <div class="col-md-12">
+            <h1>Books</h1>
+        </div>
+        <div class="col-md-12" id="books"></div>
+    </div>
+</div>
