@@ -26,14 +26,20 @@ namespace Web.Models
 
         private void LoadBooks(string isbns)
         {
+            var newRecords = new List<Book>();
             var isbnList = isbns.Split(' ');
             foreach (var isbn in isbnList)
             {
-                LoadBook(isbn);
+                LoadBook(isbn, newRecords);
+            }
+            if (newRecords.Count > 0)
+            {
+                dbContext.Books.AddRange(newRecords);
+                dbContext.SaveChanges();
             }
         }
 
-        private void LoadBook(string isbn)
+        private void LoadBook(string isbn, List<Book> newRecords)
         {
             if(String.IsNullOrEmpty(isbn)) return;
             var key = Convert.ToInt64(isbn);
@@ -48,12 +54,12 @@ namespace Web.Models
             using (var streamReader = new StreamReader(response.GetResponseStream()))
             {
                 var json = streamReader.ReadToEnd();
-                AddBook(json, isbn);
+                AddBook(json, isbn, newRecords);
             }
             response.Close();
         }
 
-        private void AddBook(String json, string isbn)
+        private void AddBook(String json, string isbn, List<Book> newRecords)
         {
             var jss = new JavaScriptSerializer();
 
@@ -67,9 +73,23 @@ namespace Web.Models
             var book = new Book() { Isbn = Convert.ToInt64(isbn), Id = id };
             book.Title = product["title"];
             book.ImageUrl = product["imageurl"];
+            if (product.ContainsKey("contributors"))
+                book.Authors = GetAuthors(product["contributors"]);
+            book.Rating = Convert.ToInt32(product["ratingavg"]);
             books.Add(book);
-            dbContext.Books.Add(book);
-            dbContext.SaveChanges();
+            newRecords.Add(book);
+        }
+
+        private string GetAuthors(dynamic contributors)
+        {
+            if (contributors.Length == 0) return String.Empty;
+            var authors = String.Empty;
+            for (int i = 0; i < contributors.Length; i++)
+            {
+                if (!String.IsNullOrEmpty(authors)) authors += " & ";
+                authors += contributors[i]["name"];
+            }
+            return "af "+authors;
         }
     }
 }

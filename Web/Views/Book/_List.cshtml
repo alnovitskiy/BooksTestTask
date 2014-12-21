@@ -9,6 +9,13 @@
         <div><img id="bookImg" src="@book.ImageUrl" /></div>
         <div><span>@book.Isbn</span></div>
         <div><span>@book.Title</span></div>
+        <div><span class="authors">@book.Authors</span></div>
+        @for (int i = 1; i < 6; i++)
+        {
+            var src = i <= book.Rating ? "starY.svg" : "starG.svg";
+            src = "/Content/Images/" + src;
+            <img src="@src"/>
+        }
     </div>
 }
 

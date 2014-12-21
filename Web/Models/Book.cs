@@ -17,8 +17,7 @@ namespace Web.Models
         public bool IsMakred { get; set; }
         public String Title { get; set; }
         public String ImageUrl { get; set; }
-
         public String Authors { get; set; }
-
+        public int Rating { get; set; }
     }
 }
